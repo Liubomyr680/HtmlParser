@@ -23,7 +23,8 @@ public class HtmlParser {
         Document page = Jsoup.connect("https://www.marathonbet.com/su/popular/Tennis+-+2398").timeout(5000).get();
 
         Elements elementsName = page.select("div.today-member-name.nowrap");
-        Elements elementsCoefficient1 = page.select("td.price.height-column-with-price.first-in-main-row.coupone-width-1");
+//        Elements elementsTomorrowName = page.select("div.member-name nowrap");
+        Elements elementsCoefficient = page.select("td.price.height-column-with-price.coupone-width-1");
 
         elementsName.forEach(element -> {
             Element nameElement1 = element.child(0);
@@ -31,18 +32,19 @@ public class HtmlParser {
             marathonBetDataName.add(new MarathonBet(name));
         });
 
-        marathonBetDataName.forEach(System.out::println);
+        elementsCoefficient.forEach(element -> {
 
-        elementsCoefficient1.forEach(element -> {
-            Element coefficientElement = element;
-
-            double coefficient = Double.parseDouble(coefficientElement.text());
-            marathonBetDataCoefficient1.add(coefficient);
+            Element coefficientElement = element.child(0);
+            if(!coefficientElement.text().isEmpty()){
+                double coefficient = Double.parseDouble(coefficientElement.text());
+                marathonBetDataCoefficient1.add(coefficient);
+            }
         });
 
-
-
-        marathonBetDataCoefficient1.forEach(System.out::println);
-
+       for(int i = 0; i < marathonBetDataName.size(); i++){
+           if(i % 2 == 0)
+               System.out.println("\n");
+           System.out.println(i + "  " + marathonBetDataName.get(i) + "\t------\t" + marathonBetDataCoefficient1.get(i));
+       }
     }
 }
