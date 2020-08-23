@@ -23,6 +23,8 @@ public class AlternateParseController {
     public List<MarathonBetCoupon> parse() throws IOException {
         Document doc = Jsoup.connect("https://www.marathonbet.com/betting/Tennis+-+2398").get();
         Date parseDate = new Date();
+        Elements x = doc.select("div.category-container");
+        log.info(x.text());
         return doc.select("div.category-container").stream()
                 .flatMap(category -> parseCategory(category).stream())
                 .peek(coupon -> coupon.setParseDate(parseDate))
@@ -46,7 +48,7 @@ public class AlternateParseController {
         String price1 = prices.get(0).text();
         String price2 = prices.get(1).text();
 
-        log.info("{} ({}) --- {} ({}) | {}", player1, price1, player2, price2, date);
+//        log.info("{} ({}) --- {} ({}) | {}", player1, price1, player2, price2, date);
         return MarathonBetCoupon.builder()
                 .category(categoryName)
                 .date(date)
